@@ -1,8 +1,10 @@
 {
   "$schema": "https://railway.app/railway.schema.json",
   "build": {
-    "builder": "PHP",
-    "phpVersion": "7.4"
+    "builder": "NIXPACKS",
+    "installCommand": "composer install --no-dev --optimize-autoloader",
+    "buildCommand": "echo 'Build complete'",
+    "startCommand": "php -S 0.0.0.0:$PORT -t public"
   },
   "deploy": {
     "numReplicas": 1,
