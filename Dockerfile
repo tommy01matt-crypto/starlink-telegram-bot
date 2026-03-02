@@ -12,11 +12,8 @@ RUN apt-get update && apt-get install -y \
 # curl, json, pdo ya vienen incluidos en PHP 8.0
 RUN docker-php-ext-install pdo_mysql zip
 
-# Enable Apache mod_rewrite
+# Enable Apache mod_rewrite (required for .htaccess)
 RUN a2enmod rewrite
-
-# Copy custom Apache configuration
-COPY apache2.conf /etc/apache2/apache2.conf
 
 # Set working directory
 WORKDIR /var/www/html
