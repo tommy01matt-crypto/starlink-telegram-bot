@@ -5,7 +5,7 @@
     # Allow directory listing NO
     Options -Indexes
     
-    # Route all requests to index.php
+    # Route all requests to index.php in current directory
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteRule ^(.*)$ index.php [QSA,L]

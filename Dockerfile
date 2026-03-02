@@ -31,6 +31,9 @@ RUN chown -R www-data:www-data /var/www/html \
 # Install dependencies (run as www-data)
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 
+# Change to public directory for Apache
+WORKDIR /var/www/html/public
+
 # Expose port 80 for Apache
 EXPOSE 80
 
