@@ -15,9 +15,6 @@ RUN docker-php-ext-install pdo_mysql zip
 # Enable Apache mod_rewrite (required for .htaccess)
 RUN a2enmod rewrite
 
-# Copy custom Apache configuration to override DocumentRoot
-COPY apache2.conf /etc/apache2/apache2.conf
-
 # Copy project files to /var/www/html
 COPY --chown=www-data:www-data . /var/www/html
 
@@ -37,5 +34,5 @@ RUN composer install --no-dev --optimize-autoloader --no-interaction
 # Expose port 80 for Apache
 EXPOSE 80
 
-# Start Apache in foreground
-CMD ["apache2-foreground"]
+# Start Apache with custom DocumentRoot pointing to public folder
+CMD sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/html/public|' /etc/apache2/sites-available/000-default.conf && apache2-foreground
