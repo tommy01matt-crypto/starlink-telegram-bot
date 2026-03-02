@@ -2,7 +2,7 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
     
-    # Allow access to all files in public directory
+    # Allow directory listing NO
     Options -Indexes
     
     # Route all requests to index.php
@@ -11,14 +11,13 @@
     RewriteRule ^(.*)$ index.php [QSA,L]
 </IfModule>
 
-# Allow access to all files
-<FilesMatch ".*">
-    Order allow,deny
-    Allow from all
-</FilesMatch>
+# Apache 2.4+ Require all granted
+<RequireAny>
+    Require all granted
+</RequireAny>
 
 # PHP settings
-<IfModule mod_php7.c>
+<IfModule mod_php.c>
     php_value upload_max_filesize 128M
     php_value post_max_size 128M
     php_value max_execution_time 30
