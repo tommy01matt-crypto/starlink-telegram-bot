@@ -15,11 +15,14 @@ RUN docker-php-ext-install pdo_mysql zip
 # Enable Apache mod_rewrite (required for .htaccess)
 RUN a2enmod rewrite
 
+# Copy custom Apache configuration to override DocumentRoot
+COPY apache2.conf /etc/apache2/apache2.conf
+
+# Copy project files to /var/www/html
+COPY --chown=www-data:www-data . /var/www/html
+
 # Set working directory
 WORKDIR /var/www/html
-
-# Copy project files
-COPY --chown=www-data:www-data . .
 
 # Install composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
@@ -30,9 +33,6 @@ RUN chown -R www-data:www-data /var/www/html \
 
 # Install dependencies (run as www-data)
 RUN composer install --no-dev --optimize-autoloader --no-interaction
-
-# Change to public directory for Apache
-WORKDIR /var/www/html/public
 
 # Expose port 80 for Apache
 EXPOSE 80
