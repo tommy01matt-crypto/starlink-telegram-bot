@@ -29,12 +29,28 @@ if (!getenv('BOT_TOKEN') && !isset($_ENV['BOT_TOKEN'])) {
     }
 }
 
+// Función helper para obtener variables de entorno
+function getEnvVar(string $key, $default = '') {
+    // Primero buscar en $_ENV
+    if (isset($_ENV[$key]) && $_ENV[$key] !== '') {
+        return $_ENV[$key];
+    }
+    // Luego en getenv() (funciona en CLI y algunos entornos)
+    $value = getenv($key);
+    if ($value !== false && $value !== '') {
+        return $value;
+    }
+    // Valor por defecto
+    return $default;
+}
+
 /**
  * Configuración principal del Bot
  */
 return [
     // Token del Bot de Telegram (obtenido de @BotFather)
-    'bot_token' => getenv('BOT_TOKEN') ?: ($_ENV['BOT_TOKEN'] ?? ''),
+    // IMPORTANTE: En Render.com, configura esta variable en el panel del servicio
+    'bot_token' => getEnvVar('BOT_TOKEN', ''),
     
     // URL base de la API de Telegram
     'api_url' => 'https://api.telegram.org',
@@ -45,17 +61,18 @@ return [
     // Username del bot en Telegram
     'bot_username' => 'asistenteprueba2026_bot',
     
-    // URL del webhook (configurada automáticamente en Railway)
-    'webhook_url' => getenv('WEBHOOK_URL') ?: ($_ENV['WEBHOOK_URL'] ?? ''),
+    // URL del webhook (configurada automáticamente)
+    'webhook_url' => getEnvVar('WEBHOOK_URL', ''),
     
     // Modo de desarrollo (true para mostrar errores detallados)
-    'debug' => filter_var(getenv('DEBUG') ?: ($_ENV['DEBUG'] ?? 'false'), FILTER_VALIDATE_BOOLEAN),
+    // En producción (Render), usar 'false'
+    'debug' => filter_var(getEnvVar('DEBUG', 'false'), FILTER_VALIDATE_BOOLEAN),
     
     // Configuración de seguridad
     'admin_ids' => array_filter(
         array_map(
             'trim',
-            explode(',', getenv('ADMIN_IDS') ?: ($_ENV['ADMIN_IDS'] ?? ''))
+            explode(',', getEnvVar('ADMIN_IDS', ''))
         )
     ),
     
@@ -63,11 +80,11 @@ return [
     'company' => [
         'name' => 'Starlink Net',
         'tagline' => 'Conectando tu mundo a la velocidad de la luz',
-        'email' => getenv('COMPANY_EMAIL') ?: 'soporte@starlinknet.com',
-        'phone' => getenv('COMPANY_PHONE') ?: '+58 412-1234567',
-        'website' => getenv('COMPANY_WEBSITE') ?: 'https://starlinknet.com',
-        'address' => getenv('COMPANY_ADDRESS') ?: 'Caracas, Venezuela',
-        'whatsapp' => getenv('COMPANY_WHATSAPP') ?: '+58 412-1234567',
+        'email' => getEnvVar('COMPANY_EMAIL', 'soporte@starlinknet.com'),
+        'phone' => getEnvVar('COMPANY_PHONE', '+58 412-1234567'),
+        'website' => getEnvVar('COMPANY_WEBSITE', 'https://starlinknet.com'),
+        'address' => getEnvVar('COMPANY_ADDRESS', 'Caracas, Venezuela'),
+        'whatsapp' => getEnvVar('COMPANY_WHATSAPP', '+58 412-1234567'),
     ],
     
     // Planes de internet
@@ -139,7 +156,7 @@ return [
     // Configuración de logs
     'logging' => [
         'enabled' => true,
-        'level' => getenv('LOG_LEVEL') ?: 'info',
+        'level' => getEnvVar('LOG_LEVEL', 'info'),
         'max_files' => 30,
         'max_size' => '10M'
     ]

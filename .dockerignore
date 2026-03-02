@@ -1,0 +1,38 @@
+# Git
+.git
+.gitignore
+
+# IDEs
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/*.log
+
+# Environment files (sensitive)
+.env
+.env.local
+.env.*.local
+
+# Testing
+phpunit.xml
+.phpunit.cache/
+
+# Documentation
+README.md
+CHANGELOG.md
+CONTRIBUTING.md
+
+# Development tools
+*.bak
+*.tmp
+*.temp
+
+# Render specific
+render.yaml

@@ -38,6 +38,24 @@ set_exception_handler(function ($e) use ($logger) {
     echo json_encode(['ok' => false, 'error' => 'Internal server error']);
 });
 
+// =====================================================
+// ENDPOINT DE HEALTH CHECK (Importante para Render.com)
+// =====================================================
+$requestUri = $_SERVER['REQUEST_URI'] ?? '';
+
+if (strpos($requestUri, '/health') === 0 || strpos($requestUri, '/ping') === 0) {
+    http_response_code(200);
+    header('Content-Type: application/json');
+    echo json_encode([
+        'status' => 'ok',
+        'service' => 'telegram-bot',
+        'timestamp' => time(),
+        'version' => '1.0.0',
+        'environment' => getenv('APP_ENV') ?: 'production'
+    ]);
+    exit;
+}
+
 // Log de solicitud entrante
 $logger->info('Solicitud recibida', [
     'method' => $_SERVER['REQUEST_METHOD'] ?? 'unknown',

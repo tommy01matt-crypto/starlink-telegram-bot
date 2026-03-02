@@ -1,0 +1,67 @@
+# ============================================
+# Configuración de Render.com para el Bot de Telegram
+# ============================================
+# Este archivo permite el despliegue automático desde GitHub
+# 
+# Uso:
+# 1. Sube este archivo a tu repositorio GitHub
+# 2. Conecta tu repositorio en Render.com
+# 3. Render detectará automáticamente la configuración
+# 
+# Más información: https://render.com/docs/yaml
+
+services:
+  # Web Service para el Bot de Telegram
+  - type: web
+    name: starlink-telegram-bot
+    env: docker
+    region: oregon
+    repo: https://github.com/tu-usuario/tu-repositorio
+    branch: main
+    
+    # Comando de construcción
+    # Instala las dependencias de Composer
+    buildCommand: composer install --no-dev --optimize-autoloader --no-interaction
+    
+    # Comando de inicio para Apache
+    # No es necesario porque el Dockerfile ya tiene CMD
+    # startCommand: (usará el CMD del Dockerfile)
+    
+    # Variables de entorno
+    # IMPORTANTE: Configura BOT_TOKEN en el panel de Render
+    envVars:
+      - key: BOT_TOKEN
+        sync: false  # Establece el valor en el panel de Render
+      - key: APP_ENV
+        value: production
+      - key: DEBUG
+        value: "false"
+      - key: LOG_LEVEL
+        value: info
+      - key: WEBHOOK_URL
+        sync: false
+      
+    # Despliegue automático cuando hay cambios en main
+    autoDeploy: true
+    
+    # Configuración del plan gratuito
+    # No especificamos plan para usar el gratuito por defecto
+    
+# ============================================
+# NOTAS IMPORTANTES:
+# ============================================
+# 
+# 1. Reemplaza 'tu-usuario/tu-repositorio' con tu repositorio real
+# 
+# 2. Después de crear el servicio en Render:
+#    - Ve a la sección "Environment" de tu servicio
+#    - Agrega la variable BOT_TOKEN con el token de tu bot
+#    - Establece WEBHOOK_URL con la URL de tu servicio
+# 
+# 3. Para configurar el webhook de Telegram, ejecuta:
+#    curl -X POST "https://api.telegram.org/bot<TOKEN>/setWebhook" \
+#      -d "url=https://tu-servicio.onrender.com/webhook"
+#
+# 4. El endpoint de health check está disponible en:
+#    https://tu-servicio.onrender.com/health
+#
