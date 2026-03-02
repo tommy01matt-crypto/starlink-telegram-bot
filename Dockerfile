@@ -9,7 +9,8 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Install required PHP extensions
-RUN docker-php-ext-install curl json pdo pdo_mysql zip
+# curl, json, pdo ya vienen incluidos en PHP 8.0
+RUN docker-php-ext-install pdo_mysql zip
 
 # Enable Apache mod_rewrite
 RUN a2enmod rewrite
