@@ -15,6 +15,9 @@ RUN docker-php-ext-install pdo_mysql zip
 # Enable Apache mod_rewrite
 RUN a2enmod rewrite
 
+# Copy custom Apache configuration
+COPY apache2.conf /etc/apache2/apache2.conf
+
 # Set working directory
 WORKDIR /var/www/html
 

@@ -1,0 +1,26 @@
+# Apache Configuration for Telegram Bot
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    
+    # Allow access to all files in public directory
+    Options -Indexes
+    
+    # Route all requests to index.php
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)$ index.php [QSA,L]
+</IfModule>
+
+# Allow access to all files
+<FilesMatch ".*">
+    Order allow,deny
+    Allow from all
+</FilesMatch>
+
+# PHP settings
+<IfModule mod_php7.c>
+    php_value upload_max_filesize 128M
+    php_value post_max_size 128M
+    php_value max_execution_time 30
+    php_value memory_limit 256M
+</IfModule>
