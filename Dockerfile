@@ -1,7 +1,15 @@
 FROM php:8.0-apache
 
+# Install system dependencies required for PHP extensions
+RUN apt-get update && apt-get install -y \
+    libcurl4-openssl-dev \
+    libzip-dev \
+    zip \
+    unzip \
+    && rm -rf /var/lib/apt/lists/*
+
 # Install required PHP extensions
-RUN docker-php-ext-install curl json pdo pdo_mysql
+RUN docker-php-ext-install curl json pdo pdo_mysql zip
 
 # Enable Apache mod_rewrite
 RUN a2enmod rewrite
