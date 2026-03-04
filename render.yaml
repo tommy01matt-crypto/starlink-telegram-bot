@@ -39,7 +39,16 @@ services:
       - key: LOG_LEVEL
         value: info
       - key: WEBHOOK_URL
+        # Render proporciona esta variable automáticamente
         sync: false
+      - key: RENDER_EXTERNAL_URL
+        sync: false
+    
+    # Health check para evitar que el servicio se duerma
+    healthCheckPath: /health
+    
+    # Configurar automáticamente el webhook al iniciar
+    startCommand: php setWebhook.php
       
     # Despliegue automático cuando hay cambios en main
     autoDeploy: true
