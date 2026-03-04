@@ -23,22 +23,19 @@ if (empty($webhookUrl) && isset($_ENV['RENDER_EXTERNAL_URL'])) {
     $webhookUrl = $_ENV['RENDER_EXTERNAL_URL'] . '/webhook';
 }
 
-// Si estamos en local o no tenemos URL, intentar detectar
-if (empty($webhookUrl) && php_sapi_name() !== 'cli') {
-    $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
-    $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
-    $webhookUrl = $scheme . '://' . $host . '/webhook';
+// Fallback: URL hardcodeada de Render
+if (empty($webhookUrl)) {
+    $webhookUrl = 'https://starlink-telegram-bot.onrender.com/webhook';
 }
 
 if (empty($botToken)) {
-    echo "❌ Error: BOT_TOKEN no configurado\n";
-    exit(1);
+    echo "⚠️ BOT_TOKEN no configurado, saltando configuración de webhook\n";
+    exit(0);  // No es un error, simplemente no configuramos
 }
 
 if (empty($webhookUrl)) {
-    echo "❌ Error: WEBHOOK_URL no configurado y no se puede detectar automáticamente\n";
-    echo "   Configura la variable WEBHOOK_URL en el panel de Render.com\n";
-    exit(1);
+    echo "⚠️ WEBHOOK_URL no configurada, usando URL por defecto\n";
+    $webhookUrl = 'https://starlink-telegram-bot.onrender.com/webhook';
 }
 
 echo "🤖 Configurando webhook para bot: " . substr($botToken, 0, 10) . "...\n";

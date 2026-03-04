@@ -47,9 +47,7 @@ services:
     # Health check para evitar que el servicio se duerma
     healthCheckPath: /health
     
-    # Configurar automáticamente el webhook al iniciar
-    startCommand: php setWebhook.php
-      
+    # No necesitamos startCommand, el Dockerfile ya tiene CMD
     # Despliegue automático cuando hay cambios en main
     autoDeploy: true
     
