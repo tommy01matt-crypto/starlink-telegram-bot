@@ -35,7 +35,4 @@ RUN composer install --no-dev --optimize-autoloader --no-interaction
 EXPOSE 80
 
 # Start Apache with custom DocumentRoot pointing to public folder
-# Also configure webhook automatically on startup
-CMD sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/html/public|' /etc/apache2/sites-available/000-default.conf && \
-    php /var/www/html/setWebhook.php > /tmp/webhook_setup.log 2>&1 && \
-    apache2-foreground
+CMD sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/html/public|' /etc/apache2/sites-available/000-default.conf && apache2-foreground

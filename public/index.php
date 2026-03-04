@@ -56,6 +56,39 @@ if (strpos($requestUri, '/health') === 0 || strpos($requestUri, '/ping') === 0) 
     exit;
 }
 
+// Endpoint para configurar webhook manualmente
+if (strpos($requestUri, '/setup-webhook') === 0) {
+    header('Content-Type: text/plain; charset=utf-8');
+    
+    $botToken = $config['bot_token'];
+    $webhookUrl = 'https://starlink-telegram-bot.onrender.com/webhook';
+    
+    if (empty($botToken)) {
+        echo "❌ BOT_TOKEN no configurado";
+        exit;
+    }
+    
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, "https://api.telegram.org/bot{$botToken}/setWebhook");
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query([
+        'url' => $webhookUrl,
+        'allowed_updates' => ['message', 'edited_message', 'callback_query'],
+        'drop_pending_updates' => true
+    ]));
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    $response = curl_exec($ch);
+    curl_close($ch);
+    
+    $result = json_decode($response, true);
+    if ($result['ok']) {
+        echo "✅ Webhook configurado: $webhookUrl";
+    } else {
+        echo "❌ Error: " . ($result['description'] ?? 'Unknown');
+    }
+    exit;
+}
+
 // Log de solicitud entrante
 $logger->info('Solicitud recibida', [
     'method' => $_SERVER['REQUEST_METHOD'] ?? 'unknown',
